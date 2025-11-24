@@ -26,7 +26,7 @@ JOIN recruiters r
     ON j.recruiter_id = r.user_id
 LEFT JOIN applications a 
     ON a.job_id = j.id
-WHERE j.id = ?";
+WHERE j.id = ? GROUP BY j.id, r.user_id";
 
 $info_stmt = $conn->prepare($info_sql);
 $info_stmt->bind_param("ii", $user_id, $job_id);
