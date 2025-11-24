@@ -1,11 +1,18 @@
 FROM php:8.2-apache
 
-RUN a2enmod rewrite
+# Cài các package cần thiết
+RUN apt-get update && apt-get install -y \
+    libzip-dev \
+    libonig-dev \
+    default-mysql-client \
+    && docker-php-ext-install mysqli pdo pdo_mysql \
+    && a2enmod rewrite
 
+# Copy code vào container
 COPY . /var/www/html/
 
-RUN chmod -R 755 /var/www/html
+# Tạo thư mục uploads
+RUN mkdir -p /var/www/html/uploads && chmod -R 775 /var/www/html/uploads
 
 EXPOSE 80
-
 CMD ["apache2-foreground"]
