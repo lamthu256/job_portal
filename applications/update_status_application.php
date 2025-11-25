@@ -9,16 +9,20 @@ $status = $data['status'] ?? '';
 $title = $data['title'] ?? '';
 $companyName = $data['company_name'] ?? '';
 
+date_default_timezone_set('Asia/Ho_Chi_Minh');
+$time = date('Y-m-d H:i:s');
+
 if (!$application_id || !$status || !$title || !$companyName) {
     echo json_encode(['success' => false, 'message' => 'Missing fields']);
     exit;
 }
 
 $field = strtolower($status) . '_at';
-$stmt = $conn->prepare("UPDATE applications SET status = ?, $field = NOW() WHERE id = ?");
+$stmt = $conn->prepare("UPDATE applications SET status = ?, $field = ? WHERE id = ?");
 $stmt->bind_param(
-    "si",
+    "ssi",
     $status,
+    $time,
     $application_id
 );
 

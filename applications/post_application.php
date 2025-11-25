@@ -53,11 +53,14 @@ $resume_url = "https://firebasestorage.googleapis.com/v0/b/$firebase_project_id.
 
 // Insert into DB
 try {
+    date_default_timezone_set('Asia/Ho_Chi_Minh');
+    $applied_at = date('Y-m-d H:i:s');
+
     $stmt = $conn->prepare("
-        INSERT INTO applications (job_id, candidate_id, resume_url, introduction) 
-        VALUES (?, ?, ?, ?)
+        INSERT INTO applications (job_id, candidate_id, resume_url, introduction, applied_at) 
+        VALUES (?, ?, ?, ?, ?)
     ");
-    $stmt->bind_param("iiss", $job_id, $candidate_id, $resume_url, $introduction);
+    $stmt->bind_param("iisss", $job_id, $candidate_id, $resume_url, $introduction, $applied_at);
     $stmt->execute();
 
     echo json_encode([
